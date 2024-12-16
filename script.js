@@ -6,9 +6,11 @@ const setupMenu = () => {
     const header = document.querySelector('header');
     header.innerHTML = `
         <div class="flex justify-between items-center p-4 bg-gray-800 shadow-md">
+        <a href="index.html">
             <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-400">
                 Valorant
             </h1>
+        </a>
             <nav class="hidden md:flex gap-6">
                 <a href="index.html" class="text-gray-200 hover:text-red-400 text-xl transition">Agentes</a>
                 <a href="mapas.html" class="text-gray-200 hover:text-red-400 text-xl transition">Mapas</a>
