@@ -12,7 +12,7 @@ const setupMenu = () => {
             <nav class="hidden md:flex gap-6">
                 <a href="index.html" class="text-gray-200 hover:text-red-400 text-xl transition">Agentes</a>
                 <a href="mapas.html" class="text-gray-200 hover:text-red-400 text-xl transition">Mapas</a>
-                <a href="Armas.html" class="text-gray-200 hover:text-red-400 text-xl transition">Armas</a>
+                <a href="armas.html" class="text-gray-200 hover:text-red-400 text-xl transition">Armas</a>
             </nav>
             <!-- Menú hamburguesa para móvil -->
             <button id="menu-toggle" class="md:hidden text-gray-200 hover:text-red-400 text-2xl focus:outline-none">
