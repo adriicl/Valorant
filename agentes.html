@@ -1,48 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Mapas</title>
+    <title>Detalles del Agente</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="mapas.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
+<body class="bg-gradient-to-br from-gray-900 to-black text-gray-200 min-h-screen">
+    <header>
 
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
-
-    <!-- Header -->
-    <header class="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-700">
-        <h1 class="text-xl font-bold">Agentes</h1>
-        <nav class="flex gap-4">
-            <a href="index.html" class="text-white-500 hover:underline text-xl">Main</a>
-            <a href="mapas.html" class="text-white-500 hover:underline text-xl">Mapas</a>
-            <a href="armas.html" class="text-white-500 hover:underline text-xl">Armas</a>
-        </nav>
-        <label class="relative inline-flex items-center cursor-pointer">
-            <input class="sr-only peer" type="checkbox" id="theme-toggle" onchange="toggleTheme()" />
-            <div class="w-24 h-12 rounded-full ring-0 peer duration-500 outline-none bg-gray-200 overflow-hidden before:flex before:items-center before:justify-center after:flex after:items-center after:justify-center before:content-['☀️'] before:absolute before:h-10 before:w-10 before:top-1/2 before:bg-white before:rounded-full before:left-1 before:-translate-y-1/2 before:transition-all before:duration-700 peer-checked:before:opacity-0 peer-checked:before:rotate-90 peer-checked:before:-translate-y-full shadow-lg shadow-gray-400 peer-checked:shadow-lg peer-checked:shadow-gray-700 peer-checked:bg-[#383838] after:content-['🌑'] after:absolute after:bg-[#1d1d1d] after:rounded-full after:top-[4px] after:right-1 after:translate-y-full after:w-10 after:h-10 after:opacity-0 after:transition-all after:duration-700 peer-checked:after:opacity-100 peer-checked:after:rotate-180 peer-checked:after:translate-y-0">
-            </div>
-        </label>
     </header>
-
-    <!-- Main Content -->
-    <main class="p-4">
-        <section id="maps-section" class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6">
-            <h2 class="text-3xl font-bold mb-4">Lista de Mapas</h2>
-
-            <!-- Contenedor de todos los mapas -->
-            <div id="maps-container">
-                <!-- Cada mapa se insertará dinámicamente aquí -->
-            </div>
-        </section>
+    <main class="p-8 max-w-5xl mx-auto">
+        <div id="agent-details" class="bg-gradient-to-br from-gray-800 via-gray-900 to-black p-8 rounded-xl shadow-lg">
+            <h2 id="agent-name" class="text-4xl font-bold text-red-400 mb-6"></h2>
+            <p id="agent-description" class="text-lg mb-6"></p>
+            <div id="agent-image" class="mb-6"></div>
+            <div id="abilities" class="flex flex-wrap gap-4"></div>
+            <div id="video-container" class="mt-6"></div>
+        </div>
     </main>
-
-    <!-- Footer -->
-    <footer class="text-center p-4 border-t border-gray-300 dark:border-gray-700">
-        <p>&copy; 2024 Valorant API Viewer</p>
-    </footer>
-
 </body>
-
 </html>
