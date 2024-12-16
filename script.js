@@ -44,14 +44,15 @@ const setupMenu = () => {
     });
 };
 
-// Función para cargar la lista de agentes en el index.html
+// Función para cargar la lista de agentes en index.html
 const loadAgents = () => {
     const agentContainer = document.getElementById('agent-container');
     if (agentContainer) {
-        fetch(`${BASE_URL}/agents`)
+        // Aplicar el filtro isPlayableCharacter=true
+        fetch(`${BASE_URL}/agents?isPlayableCharacter=true`)
             .then(res => res.json())
             .then(data => {
-                const agents = data.data;
+                const agents = data.data; // Filtrados desde la API
                 agents.forEach(agent => {
                     const agentCard = document.createElement('div');
                     agentCard.className = `
@@ -156,10 +157,114 @@ const loadMaps = () => {
     }
 };
 
+// Función para cargar las armas en armas.html
+const loadWeapons = () => {
+    const weaponsContainer = document.getElementById('weapons-container');
+    if (weaponsContainer) {
+        fetch(`${BASE_URL}/weapons`)
+            .then(res => res.json())
+            .then(data => {
+                const weapons = data.data;
+                weapons.forEach(weapon => {
+                    const weaponCard = document.createElement('div');
+                    weaponCard.className = `
+                        bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-lg shadow-lg
+                        hover:scale-105 hover:shadow-xl transition-transform p-6 cursor-pointer
+                    `;
+                    weaponCard.addEventListener('click', () => {
+                        window.location.href = `detalle-arma.html?id=${weapon.uuid}`;
+                    });
+                    weaponCard.innerHTML = `
+                        <img src="${weapon.displayIcon}" alt="${weapon.displayName}" class="w-full h-48 object-contain mb-4">
+                        <h3 class="text-2xl font-bold text-red-400">${weapon.displayName}</h3>
+                        <p class="text-gray-300 mt-2">${weapon.category.replace('EEquippableCategory::', '')}</p>
+                    `;
+                    weaponsContainer.appendChild(weaponCard);
+                });
+            })
+            .catch(error => console.error('Error al cargar las armas:', error));
+    }
+};
+
+// Función para cargar los detalles de un arma en detalle-arma.html
+const loadWeaponDetails = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const weaponId = urlParams.get('id');
+    const weaponDetails = document.getElementById('weapon-details');
+
+    if (weaponId && weaponDetails) {
+        fetch(`${BASE_URL}/weapons/${weaponId}`)
+            .then(res => res.json())
+            .then(data => {
+                const weapon = data.data;
+
+                // Mostrar información del arma
+                document.getElementById('weapon-name').textContent = weapon.displayName;
+                document.getElementById('weapon-image').src = weapon.displayIcon;
+                document.getElementById('weapon-image').alt = `Imagen de ${weapon.displayName}`;
+                document.getElementById('weapon-category').textContent = weapon.category.replace('EEquippableCategory::', '');
+
+                // Mostrar skins
+                const skinsContainer = document.getElementById('weapon-skins');
+                weapon.skins.forEach(skin => {
+                    if (skin.displayIcon && skin.chromas.some(chroma => chroma.streamedVideo)) {
+                        const skinCard = document.createElement('div');
+                        skinCard.className = `
+                            bg-gray-800 rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-transform p-4
+                        `;
+
+                        // Primera cromática con video disponible
+                        const videoChroma = skin.chromas.find(chroma => chroma.streamedVideo);
+
+                        skinCard.innerHTML = `
+                            <img src="${skin.displayIcon}" alt="${skin.displayName}" class="w-full h-48 object-contain mb-4">
+                            <h3 class="text-xl font-bold text-red-400">${skin.displayName}</h3>
+                            <button class="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition">
+                                Ver video
+                            </button>
+                        `;
+
+                        skinCard.querySelector('button').addEventListener('click', () => {
+                            const modal = document.createElement('div');
+                            modal.className = `
+                                fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50
+                            `;
+                            modal.innerHTML = `
+                                <div class="bg-gray-900 p-6 rounded-lg shadow-lg max-w-3xl">
+                                    <button class="text-gray-400 hover:text-white text-2xl absolute top-4 right-6">
+                                        ✕
+                                    </button>
+                                    <iframe class="w-full h-64 sm:h-96 rounded-lg" 
+                                        src="${videoChroma.streamedVideo}" 
+                                        frameborder="0" allowfullscreen>
+                                    </iframe>
+                                </div>
+                            `;
+                            modal.querySelector('button').addEventListener('click', () => {
+                                modal.remove();
+                            });
+                            document.body.appendChild(modal);
+                        });
+
+                        skinsContainer.appendChild(skinCard);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error al cargar los detalles del arma:', error);
+                weaponDetails.innerHTML = `
+                    <p class="text-red-500 text-center">Error: No se pudo cargar el arma.</p>
+                `;
+            });
+    }
+};
+
 // Ejecutar funciones según la página actual
 document.addEventListener('DOMContentLoaded', () => {
     setupMenu();
     loadAgents();
     loadAgentDetails();
     loadMaps();
+    loadWeapons();
+    loadWeaponDetails();
 });
