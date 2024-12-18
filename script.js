@@ -1,16 +1,16 @@
 const BASE_URL = "https://valorant-api.com/v1";
 
-// Función para generar el menú dinámico
+
+
 const setupMenu = () => {
-    // Seleccionar el header de cada página
     const header = document.querySelector('header');
     header.innerHTML = `
         <div class="flex justify-between items-center p-4 bg-gray-800 shadow-md">
-        <a href="index.html">
-            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-400">
-                Valorant
-            </h1>
-        </a>
+            <a href="index.html">
+                <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-pink-400">
+                    Valorant
+                </h1>
+            </a>
             <nav class="hidden md:flex gap-6">
                 <a href="index.html" class="text-gray-200 hover:text-red-400 text-xl transition">Agentes</a>
                 <a href="mapas.html" class="text-gray-200 hover:text-red-400 text-xl transition">Mapas</a>
@@ -44,7 +44,9 @@ const setupMenu = () => {
     closeMenu.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
     });
+    
 };
+
 
 // Función para cargar la lista de agentes en index.html
 const loadAgents = () => {
@@ -103,17 +105,19 @@ const loadAgentDetails = () => {
                 agent.abilities.forEach(ability => {
                     const abilityCard = document.createElement('div');
                     abilityCard.className = `
-                        bg-gray-800 p-4 rounded shadow-md flex flex-col items-center
+                        bg-gray-100 dark:bg-gray-800 p-4 rounded shadow-md flex flex-col items-center
                         hover:scale-105 hover:shadow-lg transition-transform
                     `;
                     abilityCard.innerHTML = `
                         <img src="${ability.displayIcon}" alt="${ability.displayName}" class="w-16 h-16 mb-4">
-                        <p class="text-center text-gray-300">${ability.displayName || 'Habilidad'}</p>
+                        <p class="text-center text-gray-700 dark:text-gray-300">${ability.displayName || 'Habilidad'}</p>
                     `;
                     abilityCard.addEventListener('click', () => {
                         const videoContainer = document.getElementById('video-container');
                         videoContainer.innerHTML = `
-                            <p class="text-center text-gray-400 py-4">${ability.description || 'Descripción no disponible'}</p>
+                            <p class="text-center text-gray-600 dark:text-gray-400 py-4">
+                                ${ability.description || 'Descripción no disponible'}
+                            </p>
                         `;
                     });
                     abilitiesContainer.appendChild(abilityCard);
@@ -133,6 +137,7 @@ const loadAgentDetails = () => {
             });
     }
 };
+
 
 // Función para cargar los mapas en mapas.html
 const loadMaps = () => {
@@ -261,9 +266,70 @@ const loadWeaponDetails = () => {
     }
 };
 
+// Crear el botón dinámicamente y agregarlo al DOM
+const addThemeButton = () => {
+    const button = document.createElement('button');
+    button.id = 'theme-toggle';
+    button.className = `
+        fixed bottom-4 right-4 bg-gray-700 text-gray-200 p-3 rounded-full shadow-lg 
+        hover:bg-gray-600 transition z-50
+    `;
+    button.textContent = '🌗'; // Icono del botón
+    document.body.appendChild(button); // Agregar el botón al final del body
+
+    // Configurar funcionalidad del botón
+    setupThemeToggle(button);
+};
+
+// Configurar la funcionalidad del cambio de tema
+const setupThemeToggle = (button) => {
+    const body = document.body;
+
+    const darkModeClass = 'dark';
+    const darkModeBodyClasses = ['bg-gray-900', 'text-gray-200'];
+    const lightModeBodyClasses = ['bg-gray-100', 'text-gray-900'];
+
+    const enableDarkMode = () => {
+        body.classList.add(darkModeClass);
+        darkModeBodyClasses.forEach(cls => body.classList.add(cls));
+        lightModeBodyClasses.forEach(cls => body.classList.remove(cls));
+        localStorage.setItem('theme', 'dark');
+    };
+
+    const disableDarkMode = () => {
+        body.classList.remove(darkModeClass);
+        lightModeBodyClasses.forEach(cls => body.classList.add(cls));
+        darkModeBodyClasses.forEach(cls => body.classList.remove(cls));
+        localStorage.setItem('theme', 'light');
+    };
+
+    // Alternar el tema al hacer clic en el botón
+    button.addEventListener('click', () => {
+        if (body.classList.contains(darkModeClass)) {
+            disableDarkMode();
+        } else {
+            enableDarkMode();
+        }
+    });
+
+    // Aplicar el tema guardado al cargar la página
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        enableDarkMode();
+    } else {
+        disableDarkMode();
+    }
+};
+
+
+
+
+
+
 // Ejecutar funciones según la página actual
 document.addEventListener('DOMContentLoaded', () => {
     setupMenu();
+    addThemeButton();
     loadAgents();
     loadAgentDetails();
     loadMaps();
